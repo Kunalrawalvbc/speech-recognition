@@ -1,0 +1,32 @@
+import speech_recognition as sr
+import webbrowser
+
+def recognize_speech_and_open_youtube():
+    recognizer = sr.Recognizer()
+
+    # Capture voice input
+    with sr.Microphone() as source:
+        print(" Say 'open YouTube'...")
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
+
+    try:
+        # Convert audio to text
+        command = recognizer.recognize_google(audio)
+        print(" You said:", repr(command))
+
+        # Check for 'open youtube' in command
+        if "open youtube" in command.lower():
+            print("Opening YouTube...")
+            webbrowser.open("https://www.youtube.com")
+        else:
+            print(" Command not recognized as 'open YouTube'. Try again.")
+            print(" Recognized phrase was:", command)
+
+    except sr.UnknownValueError:
+        print(" Could not understand your voice.")
+    except sr.RequestError:
+        print(" Could not connect to the speech recognition service.")
+
+# Run the function
+recognize_speech_and_open_youtube()
